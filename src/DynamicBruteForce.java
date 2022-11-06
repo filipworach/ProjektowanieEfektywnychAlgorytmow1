@@ -3,10 +3,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class BruteForce {
+public class DynamicBruteForce {
     Data data;
 
-    public BruteForce(Data data) {
+    public DynamicBruteForce(Data data) {
         this.data = data;
     }
 

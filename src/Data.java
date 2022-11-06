@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Data {
@@ -39,9 +40,13 @@ public class Data {
 
     public static void main(String[] args) {
         //oczekiwany wynik 10
-        Data data = new Data("C:\\Users\\filip\\OneDrive\\Pulpit\\dystanse.txt");
+       Data data = new Data("C:\\Users\\filip\\OneDrive\\Pulpit\\dystanse.txt");
+        /*DynamicBruteForce dynamicBruteForce = new DynamicBruteForce(data);
+        dynamicBruteForce.findTheShortestPath();*/
+
         BruteForce bruteForce = new BruteForce(data);
-        bruteForce.findTheShortestPath();
+        bruteForce.runBruteForce();
+
     }
 
 }
