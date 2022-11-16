@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 public class DynamicBruteForce {
@@ -31,7 +29,7 @@ public class DynamicBruteForce {
 
     public void findTheShortestPath() {
         LinkedList<Integer> remainingVertexes = new LinkedList<>();
-        int howManyVertexes = data.getHowManyVertexes();
+        int howManyVertexes = data.getHowManyVertices();
         for (int i = 1; i < howManyVertexes; i++) remainingVertexes.add(i);
         int result = dynamicProgramming(remainingVertexes, 0);
         System.out.println(result);

@@ -1,79 +1,119 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 
 public class BruteForce {
     private Data data;
-    private ArrayList<int[]> arrayOfPermutations = new ArrayList<>();
-    private int[] vertexes;
+    private ArrayList<ArrayList<Integer>> arrayOfPermutations = new ArrayList<>();
+    private ArrayList<Integer> vertices = new ArrayList<>();
+    private int shortestPath = Integer.MAX_VALUE;
+    private ArrayList<Integer> path = new ArrayList<>();
 
     public BruteForce(Data data) {
         this.data = data;
-        vertexes = new int[data.getHowManyVertexes()-1];
-        for(int i = 0; i < vertexes.length; i++) {
-            vertexes[i] = i + 1;
+        int verticesSize = data.getHowManyVertices() - 1;
+        for (int i = 0; i < verticesSize; i++) {
+            vertices.add(i + 1);
         }
 
     }
 
-    public void printAllRecursive(int n, int[] elements) {
+    public int getShortestPath() {
+        return shortestPath;
+    }
 
-        if(n == 1) {
-            printArraystoArray(elements);
+    public ArrayList<Integer> getPath() {
+        return path;
+    }
+
+    public void generatePermutations(int n, ArrayList<Integer> elements) {
+
+        if (n == 1) {
+            findTheShortest(elements);
         } else {
-            for(int i = 0; i < n-1; i++) {
-                printAllRecursive(n - 1, elements);
-                if(n % 2 == 0) {
-                    swap(elements, i, n-1);
+            for (int i = 0; i < n - 1; i++) {
+                generatePermutations(n - 1, elements);
+                if (n % 2 == 0) {
+                    swap(elements, i, n - 1);
                 } else {
-                    swap(elements, 0, n-1);
+                    swap(elements, 0, n - 1);
                 }
             }
-            printAllRecursive(n - 1, elements);
+            generatePermutations(n - 1, elements);
         }
     }
 
-    private void swap(int[] elements, int a, int b) {
-        int i = elements[a];
-        elements[a] = elements[b];
-        elements[b] = i;
+    private void swap(ArrayList<Integer> elements, int a, int b) {
+        int i = elements.get(a);
+        elements.set(a, elements.get(b));
+        elements.set(b, i);
     }
 
 
-    private void printArraystoArray(int[] input) {
-        arrayOfPermutations.add(input.clone());
+    private void printArraysToArray(ArrayList<Integer> input) {
+        arrayOfPermutations.add((ArrayList<Integer>) input.clone());
     }
 
-    public ArrayList<int[]> getArrayOfPermutations() {
+    /*public ArrayList<int[]> getArrayOfPermutations() {
         return arrayOfPermutations;
-    }
+    }*/
 
 
     public void runBruteForce() {
-        printAllRecursive(vertexes.length, vertexes);
-        System.out.println(findTheShortestPath());
+        generatePermutations(vertices.size(), vertices);
+        System.out.println("Koszt: " + this.getShortestPath());
+        printPath(this.getPath());
     }
 
-    private int findTheShortestPath() {
+    private void printPath(ArrayList<Integer> arrayList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Integer arrayList1 : arrayList) {
+            stringBuilder.append(arrayList1);
+            stringBuilder.append("->");
+        }
+        System.out.println(stringBuilder.substring(0,stringBuilder.length()-2));
+    }
+
+    private void findTheShortest(ArrayList<Integer> elements) {
+        int actualDistance = 0;
+        int elementsSize = elements.size();
+        actualDistance += data.getDistance(0, elements.get(0));
+        for(int i = 0; i < elementsSize - 1; i++) {
+            actualDistance += data.getDistance(elements.get(i), elements.get(i+1));
+        }
+        actualDistance += data.getDistance(elements.get(elementsSize-1), 0);
+        if(this.shortestPath > actualDistance){
+            this.shortestPath = actualDistance;
+            this.path = (ArrayList<Integer>) elements.clone();
+            this.path.add(0, 0);
+            this.path.add(path.size(),0);
+        }
+    }
+
+   /* private int findTheShortestPath() {
         int distance = Integer.MAX_VALUE;
         int actualDistance = 0;
-        int [] path = new int[vertexes.length + 1];
-        for(int i = 0; i < arrayOfPermutations.size(); i++) {
+        ArrayList<Integer> path = new ArrayList<>();
+        int arrayOfPermutationsSize = arrayOfPermutations.size();
+        int verticesSize = vertices.size();
+        for (int i = 0; i < arrayOfPermutationsSize; i++) {
             actualDistance = 0;
-            for(int j = 0; j < vertexes.length; j++) {
-                if(j==0) {
-                    actualDistance += data.getDistance(0,arrayOfPermutations.get(i)[j]);
-                }
-                else actualDistance += data.getDistance(arrayOfPermutations.get(i)[j-1], arrayOfPermutations.get(i)[j]);
-                if(j == vertexes.length - 1) actualDistance += data.getDistance(arrayOfPermutations.get(i)[j], 0);
+            for (int j = 0; j < verticesSize; j++) {
+                    if (j == 0) {
+                        actualDistance += data.getDistance(0, arrayOfPermutations.get(i).get(j));
+                    } else
+                        actualDistance += data.getDistance(arrayOfPermutations.get(i).get(j - 1), arrayOfPermutations.get(i).get(j));
+                    if (j == verticesSize - 1)
+                        actualDistance += data.getDistance(arrayOfPermutations.get(i).get(j), 0);
             }
-            if(actualDistance < distance) {
+            if (actualDistance < distance) {
                 distance = actualDistance;
                 path = arrayOfPermutations.get(i);
             }
         }
-        for (int i = 0; i < path.length; i++) {
-            System.out.println(path[i]);
-        }
+        path.add(0, 0);
+        path.add(path.size(), 0);
+        printPath(path);
+
         return distance;
-    }
+    }*/
 }
